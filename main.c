@@ -33,5 +33,3 @@ int main(int argc, const char * argv[]) {
     my_func();
     return 0;
 }
-
-

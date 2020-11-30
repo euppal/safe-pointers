@@ -7,7 +7,7 @@
 #define auto_internal_h
 
 // Define this if you wish to track the deallocation of your pointers.
-#define DEBUG_OWNED_POINTERS
+// #define DEBUG_OWNED_POINTERS
 
 #include "auto.h"
 

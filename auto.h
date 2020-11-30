@@ -51,6 +51,7 @@ void append_to_owned(ownership_manager_t* manager, void* ptr);
 // This macro will remove any auto function features from affecting this pointer.
 #define noauto(ptr) move_ownership(NULL, &__OWNED_POINTERS, ptr)
 
+// This macro will (re)enable auto function features for this pointer.
 #define makeauto(ptr) append_to_owned(&__OWNED_POINTERS, ptr)
 
 #endif /* auto_h */
