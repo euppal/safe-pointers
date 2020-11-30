@@ -22,6 +22,7 @@ void setup_owned_pointers(ownership_manager_t* manager);
 void free_owned_pointers(ownership_manager_t* manager);
 void* allocate_owned_pointer(size_t length, ownership_manager_t* manager);
 void move_ownership(ownership_manager_t* dest, ownership_manager_t* src, void* pointer);
+void append_to_owned(ownership_manager_t* manager, void* ptr);
 
 // This macro is the core of the auto function. You wrap the function body in this macro to enable auto functio features. An auto function cannot return a value.
 #define auto_func(body) {\
@@ -46,5 +47,10 @@ void move_ownership(ownership_manager_t* dest, ownership_manager_t* src, void* p
 
 // This macro (semicolon-terminated) will return ownership of a pointer declared in the auto function caller back to the caller.
 #define unborrow(ptr) move_ownership(__PREVIOUS_OWNED_POINTERS, &__OWNED_POINTERS, ptr)
+
+// This macro will remove any auto function features from affecting this pointer.
+#define noauto(ptr) move_ownership(NULL, &__OWNED_POINTERS, ptr)
+
+#define makeauto(ptr) append_to_owned(&__OWNED_POINTERS, ptr)
 
 #endif /* auto_h */

@@ -3,7 +3,6 @@
 //  autoptrs-in-c
 //
 
-#include "auto.h"
 #include "auto-internal.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -56,7 +55,9 @@ void free_owned_pointers(ownership_manager_t* manager) {
 
 // This function will transfer ownership of a pointer from one function's ownership manager to another's/
 void move_ownership(ownership_manager_t* dest, ownership_manager_t* src, void* pointer) {
-    append_to_owned(dest, pointer);
+    if (dest != NULL) {
+        append_to_owned(dest, pointer);
+    }
     for (size_t i = 0; i < src->length; i++) {
         if (src->pointers[i] == pointer) {
             src->pointers[i] = NULL;
