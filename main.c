@@ -17,16 +17,19 @@
 #include <string.h>
 #include "auto.h"
 
-void borrowing_auto_func(my_borrowing_func, char* str) auto_func({
+void my_borrowing_func(borrowed_args(char* str)) {
+    auto_begin();
     borrow(str);
     strcpy(str, "Hello, ");
+    str = ralloc(str, 15);
     strcat(str, "world!");
     printf("%s\n", str);
-})
+    auto_end();
+}
 
 void my_func() auto_func({
-    char* str = (char*)alloc(14);
-    call_borrowing_func(my_borrowing_func, str);
+     char* str = (char*)alloc(8);
+     my_borrowing_func(borrow_args(str));
 })
 
 int main(int argc, const char * argv[]) {

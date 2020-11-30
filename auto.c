@@ -16,7 +16,7 @@ void setup_owned_pointers(ownership_manager_t* manager) {
     manager->pointers = (void**)malloc(sizeof(void*) * 4);
 }
 
-// This function will first see if there is a NULL slot due to a borrowed pointer and insert it there. Otherwise, it will append a pointer to the array.
+// This function's ownership manager will first see if there is a NULL slot due to a borrowed pointer and insert it there. Otherwise, it will append it to the stored pointers array.
 void append_to_owned(ownership_manager_t* manager, void* ptr) {
     for (size_t i = 0; i < manager->length; i++) {
         if (manager->pointers[i] == NULL) {
@@ -32,11 +32,19 @@ void append_to_owned(ownership_manager_t* manager, void* ptr) {
     manager->pointers[manager->length++] = ptr;
 }
 
-// This function will malloc the appropriate size and then add it to the function's owning manager.
+// This function will `malloc` the appropriate size and then add it to the function's ownership manager.
 void* allocate_owned_pointer(size_t length, ownership_manager_t* manager) {
     void* ptr = malloc(length);
     append_to_owned(manager, ptr);
     return ptr;
+}
+
+// This function will `realloc` the appropriate size and then re-add it to the function's ownership manager.
+void* reallocate_owned_pointer(void* ptr, size_t length, ownership_manager_t* manager) {
+    void* new_ptr = realloc(ptr, length);
+    move_ownership(NULL, manager, ptr);
+    append_to_owned(manager, new_ptr);
+    return new_ptr;
 }
 
 // Called at the end of every auto function, this will free each pointer still owned by the function.
@@ -63,4 +71,11 @@ void move_ownership(ownership_manager_t* dest, ownership_manager_t* src, void* p
             src->pointers[i] = NULL;
         }
     }
+}
+
+// This function will exit the program upon call.
+void auto_failure(ownership_manager_t* manager, const char* msg) {
+    puts(msg);
+    free_owned_pointers(manager);
+    exit(1);
 }
