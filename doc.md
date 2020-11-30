@@ -21,6 +21,7 @@ int func2() auto_func_ret(int, {
 
 If you pass an `alloc`ed pointer to another non-auto function or a normal auto function, then when that function exits the pointer will still be valid. To enable "borrowing" of ownership from one function to another, ue the `borrow` and `unborrow` macros.
 
+```c
 void borrowing(borrowed_args(char* str)) auto_func({
     borrow(str);
     strcpy(str, "Hello, ");
