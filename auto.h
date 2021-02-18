@@ -32,16 +32,16 @@ void auto_failure(ownership_manager_t* manager, const char* msg);
 #define auto_end() free_owned_pointers(&__OWNED_POINTERS)
 
 // This macro is the core of the auto function. You wrap the function body in this macro to enable auto functio features. An auto function cannot return a value.
-#define auto_func(body) {\
+#define auto_func(...) {\
     auto_begin();\
-    body\
+    __VA_ARGS__\
     auto_end();\
 }
 
 // This macro is similar to the above one except it allows for returning values.
-#define auto_func_ret(ret_type, body) {\
+#define auto_func_ret(ret_type, ...) {\
     auto_begin();\
-    body\
+    __VA_ARGS__\
     auto_end();\
     return (ret_type)__OWNED_POINTERS.return_value;\
 }
